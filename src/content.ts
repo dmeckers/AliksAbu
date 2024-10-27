@@ -1,11 +1,11 @@
 // Функция для плавного ввода значения в поле
-function smoothInput(element, value, delay) {
+function smoothInput(element: Element, value: string, delay: number | undefined) {
     let index = 0; // Индекс текущей буквы
 
     // Функция для ввода одной буквы
     function typeNextLetter() {
         if (index < value.length) {
-            element.value += value.charAt(index); // Добавляем текущую букву к значению поля
+            (element as HTMLInputElement).value += value.charAt(index); // Добавляем текущую букву к значению поля
             console.log(`Вводим букву: ${value.charAt(index)}`);
 
             // Создаем и отправляем событие 'input' для уведомления системы об изменении значения
@@ -43,10 +43,10 @@ function fillForm() {
     // Поле для выбора страны (Latvia)
     const countryField = document.querySelector('input[aria-label="select"][role="combobox"]');
     const countryArrow = document.querySelector('.next-select-arrow'); // Стрелка для открытия выпадающего списка
-    
+
     if (countryField && countryArrow) {
         // Клик по стрелке для открытия выпадающего списка
-        countryArrow.click();
+        (countryArrow as HTMLElement).click();
         console.log('Стрелка для выбора страны нажата');
 
         // Пауза 2 секунды перед вводом значения
@@ -64,11 +64,12 @@ setTimeout(() => {
 }, 7000);
 
 // Обработчик события на кнопку "Начать"
-document.getElementById('start').addEventListener('click', function() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+document.getElementById('start')?.addEventListener('click', function () {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         chrome.scripting.executeScript({
-            target: { tabId: tabs[0].id },
-            function: fillForm
-        });
+            target: { tabId: tabs[0].id as number },
+            func: fillForm
+        })
     });
 });
+
